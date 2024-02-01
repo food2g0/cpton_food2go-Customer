@@ -1,20 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cpton_foodtogo/lib/global/global.dart';
 import 'package:cpton_foodtogo/lib/mainScreen/home_screen.dart';
-import 'package:cpton_foodtogo/lib/mainScreen/products_rating_screen.dart';
 import 'package:cpton_foodtogo/lib/theme/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
-class SellerRatingScreen extends StatefulWidget {
+class ProductRatingScreen extends StatefulWidget {
   String? riderUID;
   String? productsID;
   String? sellerUID;
   String? orderID;
 
-  SellerRatingScreen({
+  ProductRatingScreen({
     this.orderID,
     this.productsID,
     this.riderUID,
@@ -22,10 +21,10 @@ class SellerRatingScreen extends StatefulWidget {
   });
 
   @override
-  State<SellerRatingScreen> createState() => _SellerRatingScreenState();
+  State<ProductRatingScreen> createState() => _ProductRatingScreenState();
 }
 
-class _SellerRatingScreenState extends State<SellerRatingScreen> {
+class _ProductRatingScreenState extends State<ProductRatingScreen> {
   TextEditingController commentController = TextEditingController();
 
   @override
@@ -48,7 +47,7 @@ class _SellerRatingScreenState extends State<SellerRatingScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Rate your Seller",
+              "Rate sellers product",
               style: TextStyle(
                 fontSize: 16.sp,
                 fontFamily: "Poppins",
@@ -161,9 +160,7 @@ class _SellerRatingScreenState extends State<SellerRatingScreen> {
 
   void submitRating() async {
     try {
-      await FirebaseFirestore.instance.collection("sellers").doc(widget.sellerUID).collection("sellersRecord").add({
-        "productsID": widget.productsID,
-        "sellerUID": widget.sellerUID,
+      await FirebaseFirestore.instance.collection("items").doc(widget.productsID).collection("itemRecord").add({
         "rating": countRatingStars,
         "comment": commentController.text,
         // Add other fields as needed
@@ -180,9 +177,7 @@ class _SellerRatingScreenState extends State<SellerRatingScreen> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  Navigator.push(context, MaterialPageRoute(builder: (c)=>ProductRatingScreen(sellerUID: widget.sellerUID,
-                    productsID: widget.productsID, riderUID: widget.riderUID, orderID: widget.orderID,
-                  )));
+                  Navigator.push(context, MaterialPageRoute(builder: (c)=>HomeScreen()));
 
                 },
                 child: Text("OK"),
@@ -203,7 +198,6 @@ class _SellerRatingScreenState extends State<SellerRatingScreen> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-
                 },
                 child: Text("OK"),
               ),
